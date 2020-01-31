@@ -1,13 +1,6 @@
 
-//   plugins: [
-//     new MiniCssExtractPlugin({
-//       filename: 'static/css/[name].css',
-//       chunkFilename: 'static/css/[name].chunk.css'
-//     })
-//   ],
-//   performance: false
-// }
 import Config from 'webpack-chain'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import { moduleFileExtensions } from './config'
 import { Mode } from '../interface/webpack-config'
 
@@ -69,7 +62,11 @@ config.module
       })
       .end()
 
-config.plugins.set
+config.plugin('minify-css').use(MiniCssExtractPlugin, [{
+  filename: 'static/css/[name].css',
+  chunkFilename: 'static/css/[name].chunk.css'
+}])
+
 export {
   baseConfig
 }

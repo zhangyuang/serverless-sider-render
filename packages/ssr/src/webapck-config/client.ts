@@ -1,19 +1,10 @@
-// 'use strict'
-// const path = require('path')
-// const webpack = require('webpack')
-// const merge = require('webpack-merge')
+
 // const TerserPlugin = require('terser-webpack-plugin')
 // const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 // const ManifestPlugin = require('webpack-manifest-plugin')
 // const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
 // const safePostCssParser = require('postcss-safe-parser')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-// const paths = require('./paths')
-// const baseConfig = require('./webpack.config.base')
-// const publicPath = '/'
-// const isDev = process.env.NODE_ENV === 'development'
-// const shouldUseSourceMap = isDev || process.env.GENERATE_SOURCEMAP
-// const devtool = isDev ? 'cheap-module-source-map' : (shouldUseSourceMap ? 'source-map' : false)
 // const optimization = {
 //   runtimeChunk: true,
 //   splitChunks: {
@@ -95,46 +86,54 @@
 // }
 
 // module.exports = merge(baseConfig, {
-//   devtool: devtool,
 //   entry: {
 //     Page: [require.resolve('@babel/polyfill'), paths.entry]
 //   },
-//   resolve: {
-//     alias: {
-//       // for this issue https://github.com/ykfe/egg-react-ssr/issues/36
-//       'react-router': require.resolve('react-router')
-//     }
-//   },
-//   output: {
-//     path: paths.appBuild,
-//     pathinfo: true,
-//     filename: 'static/js/[name].js',
-//     chunkFilename: 'static/js/[name].chunk.js',
-//     publicPath: publicPath,
-//     hotUpdateChunkFilename: '[hash].hot-update.js',
-//     devtoolModuleFilenameTemplate: info =>
-//       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')
-//   },
 //   optimization: optimization,
 //   plugins: plugins.filter(Boolean),
-//   node: {
-//     dgram: 'empty',
-//     fs: 'empty',
-//     net: 'empty',
-//     tls: 'empty',
-//     child_process: 'empty'
-//   },
-//   performance: false
 // })
+import webpack from 'webpack'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import Config from 'webpack-chain'
 import getCSSModuleLocalIdent from 'react-dev-utils/getCSSModuleLocalIdent'
 import { baseConfig } from './base'
+import { publicPath } from './config'
+
+const isDev = process.env.NODE_ENV === 'development'
+const shouldUseSourceMap = isDev || process.env.GENERATE_SOURCEMAP
 
 const config = new Config()
 const clientConfig = config
 
 config.merge(baseConfig)
+
+config.devtool(isDev ? 'cheap-module-source-map' : (shouldUseSourceMap ? 'source-map' : false))
+
+config.entry('Page')
+        .add('src/index')
+        .end()
+        .output
+          .path('dist')
+          .filename('static/js/[name].js')
+          .chunkFilename('static/js/[name].chunk.js')
+          .publicPath(publicPath)
+
+config.optimization
+  .runtimeChunk(true)
+  .splitChunks({
+    chunks: 'all',
+    name: false,
+    cacheGroups: {
+      vendors: {
+        test: (module: any) => {
+          return module.resource &&
+          /\.js$/.test(module.resource) &&
+          module.resource.match('node_modules')
+        },
+        name: 'vendor'
+      }
+    }
+  })
 
 config.module
     .rule('less')
