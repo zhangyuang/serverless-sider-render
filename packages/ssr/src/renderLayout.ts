@@ -1,11 +1,8 @@
 
 import React from 'react'
-import { resolve, join } from 'path'
 import Shell from 'shelljs'
+import { resolve, join } from 'path'
 import { renderToNodeStream } from 'react-dom/server'
-// @ts-ignore
-import nodeExternals from 'webpack-node-externals'
-import { webpackWithPromise } from './util'
 const isDev = process.env.NODE_ENV === 'development'
 
 const reactToStream = (Component: React.FunctionComponent, props: object) => {

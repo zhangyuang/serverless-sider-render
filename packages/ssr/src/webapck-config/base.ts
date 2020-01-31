@@ -69,7 +69,7 @@ config.module
       })
       .end()
 
-config
+config.plugins.set
 export {
   baseConfig
 }
