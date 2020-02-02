@@ -17,8 +17,8 @@
     "url": "git+https://github.com/ykfe/ssr.git"
   },
   "dependencies": {
-    "@types/mini-css-extract-plugin": "^0.9.0",
     "download-git-repo": "^2.0.0",
+    "faas-runtime": "^1.2.0",
     "inquirer": "6.3.1",
     "ora": "^3.4.0",
     "react": "^16.8.3",
@@ -36,16 +36,20 @@
     "@types/react-dom": "^16.8.4",
     "@types/shelljs": "^0.8.5",
     "@types/webpack": "^4.39.3",
+    "@types/webpack-dev-server": "^3.10.0",
     "@types/yargs": "^13.0.0",
     "concurrently": "^5.0.0",
     "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "^6.0.5",
-    "postcss-safe-parser": "4.0.1",
+    "postcss-safe-parser": "^4.0.1",
     "react-dev-utils": "^10.0.0",
+    "terser-webpack-plugin": "^2.3.4",
     "typescript": "^3.5.2",
-    "webpack-chain": "^6.3.0"
+    "webpack-chain": "^6.3.0",
+    "webpack-manifest-plugin": "^2.2.0"
   },
   "keywords": [],
   "author": "",

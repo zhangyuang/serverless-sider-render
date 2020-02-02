@@ -1,9 +1,10 @@
 
 import Config from 'webpack-chain'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import { moduleFileExtensions } from './config'
 import { Mode } from '../interface/webpack-config'
+import { appConfig } from './config'
 
+const { moduleFileExtensions } = appConfig
 const config = new Config()
 const baseConfig = config
 const mode = process.env.NODE_ENV as Mode

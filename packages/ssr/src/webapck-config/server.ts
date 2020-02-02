@@ -1,31 +1,38 @@
 
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const nodeExternals = require('webpack-node-externals')
-const baseConfig = require('./webpack.config.base')
-const paths = require('./paths')
-const isDev = process.env.NODE_ENV === 'development'
+import webpack from 'webpack'
+import Config from 'webpack-chain'
+import { baseConfig } from './base'
+import { appConfig } from './config'
 
-const plugins = [
-  new webpack.DefinePlugin({
-    '__isBrowser__': false // eslint-disable-line
-  })
-]
-module.exports = merge(baseConfig, {
-  devtool: isDev ? 'eval-source-map' : '',
-  entry: {
-    Page: paths.entry
-  },
-  target: 'node',
-  externals: nodeExternals({
-    whitelist: /\.(css|less|sass|scss)$/,
-    modulesDir: paths.appNodeModules
-  }),
-  output: {
-    path: paths.appBuild,
-    publicPath: '/',
-    filename: '[name].server.js',
-    libraryTarget: 'commonjs2'
-  },
-  plugins: plugins
-})
+const { root,isDev } = appConfig
+const config = new Config()
+const nodeExternals = require('webpack-node-externals')
+
+config.merge(baseConfig)
+
+config.devtool(isDev ? 'eval-source-map' : false)
+
+config.target('node')
+
+config.entry('Page')
+        .add('src/index')
+        .end()
+        .output
+          .path('dist')
+          .filename('[name].server.js')
+          .libraryTarget('commonjs2')
+
+config.externals(nodeExternals({
+  whitelist: /\.(css|less|sass|scss)$/,
+  modulesDir: root // 保证读取的node_modules为当然应用的根目录
+}))
+
+config.plugin('define').use(webpack.DefinePlugin, [{
+  '__isBrowser__': false
+}])
+
+const serverConfig = config.toConfig()
+
+export {
+  serverConfig
+}

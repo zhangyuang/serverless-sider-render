@@ -12,8 +12,15 @@ const moduleFileExtensions = [
   'web.jsx',
   'jsx'
 ]
-
-export {
+const root = process.cwd()
+const isDev = process.env.NODE_ENV === 'development'
+const PORT = 7001
+const dist = 'dist'
+export const appConfig = {
+  root,
+  isDev,
   publicPath,
-  moduleFileExtensions
+  moduleFileExtensions,
+  PORT,
+  dist
 }
